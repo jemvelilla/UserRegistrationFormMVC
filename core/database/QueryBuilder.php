@@ -32,15 +32,10 @@ Class QueryBuilder{
 	
 	public function delete($table, $parameters){
 		
-		$ids = array();	
-		foreach ($parameters as $val){
-			$ids[] = (int)$val; 
-		}
-		
 		$sql = sprintf(
 				'delete from %s where id IN (%s)',
 				$table,
-				implode(',', $ids)
+				$parameters
 		);
 		
 		$statement = $this->conn->prepare($sql);
@@ -49,13 +44,10 @@ Class QueryBuilder{
 	}
 	
 	public function selectToUpdate($table, $parameters){
-		
-		$ids = $parameters;
-		
-		for ($i=0;$i< sizeof($ids);$i++) {
-			$sql = 'SELECT * FROM '. $table . ' where id=' . $ids[$i];
+
+			$sql = 'SELECT * FROM '. $table . ' where id=' . $parameters;
 			return $this->conn->query($sql);
-		}
+	
 	}
 	
 	public function update($table, $parameters, $values, $id){

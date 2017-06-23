@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="/views/style.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="app/views/style.css" />
 </head>
 <body id="myPage" data-spy="scroll" data-target=".navbar"
 	data-offset="50">
@@ -98,7 +99,7 @@
 			<h1>Create a New User Account</h1>
 			<p class="join"> Join us for free! </p>
 			
-			<form action="/create-new-user" method="post">
+			<form action="/add-user" method="post">
 			
 			<div class="container1">
 				<table cellpadding="1" cellspacing="1">

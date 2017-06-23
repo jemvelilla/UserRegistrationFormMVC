@@ -69,7 +69,7 @@
                 <p>Add New User</p>
                 <?php 
                 	foreach ($users as $user):
-           		?>
+                ?>
                 	<form action="/update-user" method="post" style = "display:inline">
                     <input type="text" class="w3-input w3-section" placeholder="Username" value="<?php echo $user['Username'] ?>" name="username" minlength="3" maxlength="12" required >
                     <input type="password" class="w3-input w3-section" placeholder="Current password" value="" name="oldpassword" required>

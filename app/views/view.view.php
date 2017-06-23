@@ -57,6 +57,39 @@
 	margin-right: 15px;
 	font-size: 12px;
 }
+.alert {
+	text-align: center;
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 20px;
+    background-color: #0431FA;
+    color: white;
+    opacity: 1;
+    transition: opacity 0.6s;
+    position: absolute;
+  	right: 0;
+  	bottom: 0;
+  	left: 0;
+  	box-shadow: 10px 10px 5px #888888;
+}
+
+.closebtn {
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+.upperbuttons{
+	float: right;
+}
 </style>
 </head>
 <body>
@@ -78,15 +111,27 @@
 	</nav>
 
 	<!-- Page content -->
-	<br>
-	<br>
 	<div class="w3-content w3-padding" style="max-width: 1564px">
-		<div class="w3-container w3-padding-32">
-			<form action="/select" method="post">
-				<table class="w3-table-all w3-hoverable w3-centered w3-card-4">
+		<div class="w3-container w3-padding-32 w3-responsive">
+			<div class="upperbuttons">
+			
+			<a href="/add">
+				<button class="w3-button w3-black w3-section w3-small" type="submit"
+					value="Add" name="add">
+					<i class="fa fa-pencil"></i> ADD USER
+				</button>
+			</a>
+			
+			<a href="/add">
+				<button class="w3-button w3-black w3-section w3-small" type="submit"
+					value="DeleteAll" name="deleteAll">
+					<i class="fa fa-trash-o"></i> DELETE ALL
+				</button>
+			</a>
+			</div>		
+			<table class="w3-table-all w3-hoverable w3-centered w3-card-4 w3-small well">
 				<thead>
 					<tr class="w3-light-grey">
-						<th></th>
 						<th>USERNAME</th>
 						<th>PASSWORD</th>
 						<th>EMAIL</th>
@@ -94,14 +139,14 @@
 						<th>LAST NAME</th>
 						<th>BIRTHDATE</th>
 						<th>GENDER</th>
+						<th></th>
+						<th></th>
 					</tr>
 				</thead>
 		<?php
 		foreach ( $users as $user ) :
 			?>
 			<tr>
-					<td><input type="checkbox" name="selected[]"
-						value=<?= $user->id; ?>></td>
 					<td><div class="radio">
 							<center><?= $user->Username; ?></center>
 						</div></td>
@@ -123,44 +168,64 @@
 					<td><div class="radio">
 							<center><?= $user->Gender; ?></center>
 						</div></td>
+					<td><div class="radio">
+							<form action='/select' method='post'>
+								<button class="w3-button w3-green w3-round-xxlarge" type="submit"
+									value="<?= $user->id ?>" name="update">
+									<i class="fa fa-pencil"></i> UPDATE
+								</button>
+							</form>
+						</div>
+					</td>
+					<td><div class="radio">
+							<form action='/delete' method='post'>
+								<button class="w3-button w3-green w3-round-xxlarge" type="submit"
+									value="<?= $user->id ?>" name="delete">
+									<i class="fa fa-trash-o"></i> DELETE
+								</button>
+							</form>
+						</div>
+					</td>
+					
 				</tr>
 		<?php
 		endforeach
 		;
 		?>
 		
-			</table>
-		
+		</table>
 	</div>
-	
-	
-	<div class="w3-row-padding w3-padding-32 w3-center" style="margin: 0 -16px">
-		<a href="/delete">
-			<button class="w3-button w3-green w3-round-xxlarge" type="submit"
-				value="Delete" name="delete">
-				<i class="fa fa-trash-o"></i> DELETE
-			</button>
-		</a>
-		
-		<a href="/update">
-			<button class="w3-button w3-green w3-round-xxlarge" type="submit"
-				value="Update" name="update">
-				<i class="fa fa-pencil"></i> UPDATE
-			</button>
-		</a>
-		
-	</form>
-		<a href="/add">
-			<button class="w3-button w3-green w3-round-xxlarge" type="submit"
-				value="Add" name="add">
-				<i class="fa fa-pencil"></i> ADD
-			</button>
-		</a>
-				
-		
-	</div>
-		
-		<!-- End page content -->
 </div>
+	
+	
+				
+		<!-- End page content -->
+<?php 
+	if (isset($_SESSION['message'])){
+?>			
+	<div class="alert">
+		<?php 
+	  		echo $_SESSION['message'];
+	  	?>	
+		<span class="closebtn" onclick="<?php unset($_SESSION['message']); ?>">&times;</span> 
+	</div>		
+<?php 
+	}
+?>
+</div>
+
+<script>
+var close = document.getElementsByClassName("closebtn");
+var i;
+
+for (i = 0; i < close.length; i++) {
+    close[i].onclick = function(){
+        var div = this.parentElement;
+        div.style.opacity = "0";
+        
+    }
+}
+</script>
 </body>
+
 </html>
