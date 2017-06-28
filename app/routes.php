@@ -10,6 +10,7 @@ $router->define([
 	'select' => 'UsersController@select', //used to get the value to update
 	'update-user' => 'UsersController@update', //used for update function
 	'delete' => 'UsersController@delete',
+	'deleteall' => 'UsersController@deleteall',
 	'login' => 'UsersController@login'
 	
 ]);

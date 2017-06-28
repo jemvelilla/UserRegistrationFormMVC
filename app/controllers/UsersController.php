@@ -78,7 +78,6 @@ class UsersController{
 		session_start();
 	
 		if(isset($_SESSION['user'])){
-				
 			App::get('database') -> update('records', [
 			'Username= :Username' => $_POST['username'],
 			'Password= :Password' => sha1($_POST['password']),
@@ -96,11 +95,10 @@ class UsersController{
 			':Birthdate' => $_POST['birthdate'],
 			':Gender' => $_POST['gender']
 			], $_SESSION['selected']);
-	
-	
+			
 			$_SESSION['message'] = "Update successful";
 			header('location: /view');
-				
+
 		} else{
 	
 			echo "<script> alert('Login first!');
@@ -130,14 +128,37 @@ class UsersController{
 		}
 	
 	}
+	
+	public function deleteall(){
+		session_start();
+		if(isset($_SESSION['user'])){
+	
+	
+			App::get('database') -> deleteall('records');
+	
+			$_SESSION['message'] = "Delete successful";
+			header('location: /view');
+	
+		} else{
+	
+			echo "<script> alert('Login first!');
+				window.location.href='/';
+				</script>";
+	
+		}
+	
+	}
+	
 	public function select(){
 	
 		session_start();
 	
 		if(isset($_SESSION['user'])){
-	
+		
 			$users = App::get('database')->selectToUpdate('records',  $_POST['update']);
-	
+			
+			$_SESSION['selected'] = $_POST['update'];
+			
 			return view('update', ['users' => $users]);
 				
 		} else {

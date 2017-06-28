@@ -31,40 +31,61 @@ Class QueryBuilder{
 	}
 	
 	public function delete($table, $parameters){
+		try{
+			$sql = sprintf(
+					'delete from %s where id IN (%s)',
+					$table,
+					$parameters
+			);
+			
+			$statement = $this->conn->prepare($sql);
 		
-		$sql = sprintf(
-				'delete from %s where id IN (%s)',
-				$table,
-				$parameters
-		);
+			$statement->execute();
+		} catch (PDOException $e){
+			session_start();
+			$_SESSION['message'] = "Delete not successful.";
+		}
 		
-		$statement = $this->conn->prepare($sql);
-	
-		$statement->execute();
 	}
 	
+	public function deleteall($table){
+		try{
+			$sql = sprintf(
+					'delete from %s',
+					$table
+			);
+		
+			$statement = $this->conn->prepare($sql);
+		
+			$statement->execute();
+		} catch (PDOException $e){
+			session_start();
+			$_SESSION['message'] = "Delete not successful.";
+		}
+	}
+		
 	public function selectToUpdate($table, $parameters){
 
 			$sql = 'SELECT * FROM '. $table . ' where id=' . $parameters;
+			
 			return $this->conn->query($sql);
 	
 	}
 	
 	public function update($table, $parameters, $values, $id){
-		
-		$ids = $id;
-		
-		for ($i=0;$i< sizeof($ids);$i++) {
+		try{
 			$sql = sprintf(
 					'update %s SET %s where id = %s',
 					$table,
 					implode(', ', array_keys($parameters)),
-					$ids[$i]
+					$id
 			);
 			
 			$statement = $this->conn->prepare($sql);
 			$statement->execute($values);
-			
-		}
+		} catch (PDOException $e){
+			session_start();
+			$_SESSION['message'] = "Update not successful.";
+		}	
 	}
 }

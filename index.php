@@ -8,6 +8,5 @@ use App\Core\Request;
 
 $uri = (trim($_SERVER['REQUEST_URI'], '/'));
 
-
 Router::load('app/routes.php')
  ->direct(Request::uri());
