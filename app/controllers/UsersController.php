@@ -3,27 +3,28 @@
 namespace App\Controllers;
 
 use App\Core\App;
+use App\Models\User;
 
-class UsersController{
+class UsersController extends User{
 	
 	public function login(){
+		
+		$this->set();
+		
 		$users = App::get('database')->selectUser('records');
-	
+		
 		foreach ($users as $row){
-	
-			if($_POST['username'] == $row->Username && sha1($_POST['password']) == $row->Password){
-	
+			
+			if($this->getUsername() == $row->Username 
+				&& sha1($this->getPassword()) == $row->Password){
+
 				session_start();
 				$_SESSION['user'] = "active";
-	
-				header('Location: /view');
-				exit ();
-			}
-			else{
-				echo "<script> alert('Invalid Credentials!');
-					window.location.href='/';
-					</script>";
-			}
+				
+				return redirect('view');		
+			} 
+
+			echo script('Invalid Credentials.', '/');
 		}
 	}
 	
@@ -37,116 +38,102 @@ class UsersController{
 	
 			return view('view', ['users' => $users]);
 	
-		} else{
-	
-			echo "<script> alert('Login first!');
-			window.location.href='/';
-		</script>";
-	
 		}
-	
+			
+		echo script('Login first!', '/');
 	}
 	
 	public function add(){
-	
+		$this->set();
+		
 		App::get('database') -> insert('records', [
-		'Username' => $_POST['username'],
-		'Password' => sha1($_POST['password']),
-		'Email' => $_POST['email'],
-		'First_Name' => $_POST['firstname'],
-		'Last_Name' => $_POST['lastname'],
-		'Birthdate' => $_POST['birthdate'],
-		'Gender' => $_POST['gender']
+		'Username' => $this->getUsername(),
+		'Password' => sha1($this->getPassword()),
+		'Email' => $this->getEmail(),
+		'First_Name' => $this->getFirstname(),
+		'Last_Name' => $this->getLastname(),
+		'Birthdate' => $this->getBirthdate(),
+		'Gender' => $this->getGender()
 		]);
 	
 		if(isset($_POST['create'])){
-			echo "<script> alert('Successfully Created!');
-				window.location.href='/';
-			</script>";
+			
+			echo script('Successfully Created!', '/');
+			
 		} else if (isset($_POST['addUser'])) {
-			echo "<script> alert('Successfully Added!');
-				window.location.href='/view';
-			</script>";
+			
+			echo script('Successfully Added!', '/view');
+	
 		} else if (isset($_POST['addAnother'])){
-			echo "<script> alert('Successfully Added!');
-				window.location.href='/add';
-			</script>";
+			
+			echo script('Successfully Added!', '/add');
+		
 		}
 	
 	}
 	public function update(){
+		
+		$this->set();
+		
 		session_start();
-	
+		
 		if(isset($_SESSION['user'])){
 			App::get('database') -> update('records', [
-			'Username= :Username' => $_POST['username'],
-			'Password= :Password' => sha1($_POST['password']),
-			'Email= :Email' => $_POST['email'],
-			'First_Name= :First_Name' => $_POST['firstname'],
-			'Last_Name= :Last_Name' => $_POST['lastname'],
-			'Birthdate= :Birthdate' => $_POST['birthdate'],
-			'Gender= :Gender' => $_POST['gender']
+			'Username= :Username' => $this->getUsername(),
+			'Password= :Password' => sha1($this->getPassword()),
+			'Email= :Email' => $this->getEmail(),
+			'First_Name= :First_Name' => $this->getFirstname(),
+			'Last_Name= :Last_Name' => $this->getLastname(),
+			'Birthdate= :Birthdate' => $this->getBirthdate(),
+			'Gender= :Gender' => $this->getGender()
 			], [
-			':Username' => $_POST['username'],
-			':Password' => sha1($_POST['password']),
-			':Email' => $_POST['email'],
-			':First_Name' => $_POST['firstname'],
-			':Last_Name' => $_POST['lastname'],
-			':Birthdate' => $_POST['birthdate'],
-			':Gender' => $_POST['gender']
+			':Username' => $this->getUsername(),
+			':Password' => sha1($this->getPassword()),
+			':Email' => $this->getEmail(),
+			':First_Name' => $this->getFirstname(),
+			':Last_Name' => $this->getLastname(),
+			':Birthdate' => $this->getBirthdate(),
+			':Gender' => $this->getGender()
 			], $_SESSION['selected']);
 			
 			$_SESSION['message'] = "Update successful";
-			header('location: /view');
+			return redirect('view');
 
-		} else{
-	
-			echo "<script> alert('Login first!');
-			window.location.href='/';
-			</script>";
-	
 		}
-	
+			
+		echo script('Login first!', '/');
 	}
 	
 	public function delete(){
+		
 		session_start();
+		
 		if(isset($_SESSION['user'])){
-				
 				
 			App::get('database') -> delete('records', $_POST['delete']);
 				
 			$_SESSION['message'] = "Delete successful";
-			header('location: /view');
+			return redirect('view');
 				
-		} else{
-	
-			echo "<script> alert('Login first!');
-				window.location.href='/';
-				</script>";
-	
-		}
-	
+		} 
+		
+		echo script('Login first!', '/');
 	}
 	
 	public function deleteall(){
+		
 		session_start();
+		
 		if(isset($_SESSION['user'])){
-	
 	
 			App::get('database') -> deleteall('records');
 	
 			$_SESSION['message'] = "Delete successful";
-			header('location: /view');
-	
-		} else{
-	
-			echo "<script> alert('Login first!');
-				window.location.href='/';
-				</script>";
+			return redirect('view');
 	
 		}
-	
+		
+		echo script('Login first!', '/');
 	}
 	
 	public function select(){
@@ -161,12 +148,9 @@ class UsersController{
 			
 			return view('update', ['users' => $users]);
 				
-		} else {
-			echo "<script> alert('Login first!');
-			window.location.href='/';
-			</script>";
-		}
+		}	
+		
+		echo script('Login first!', '/');
 	}
-	
-	
+
 }

@@ -13,3 +13,13 @@ function view($name, $data){
 	extract($data);
 	return require "app/views/{$name}.view.php";
 }
+
+function redirect($location){
+	return header("Location: /{$location}");
+}
+
+function script($message, $location){
+	return "<script> alert('{$message}');
+				window.location.href='{$location}';
+			</script>";
+}
